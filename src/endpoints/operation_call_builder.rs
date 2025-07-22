@@ -29,6 +29,13 @@ impl<'a> OperationCallBuilder<'a> {
 
         self
     }
+
+    pub fn join_with_txns(&mut self) -> &mut Self {
+        self.query_params
+            .insert(String::from("join"), String::from("transactions"));
+
+        self
+    }
 }
 
 impl<'a> CallBuilder<Operation> for OperationCallBuilder<'a> {
@@ -89,12 +96,13 @@ mod tests {
 
         let op_records = ocb
             .for_endpoint(Endpoint::Accounts(String::from(
-                "GAUZUPTHOMSZEV65VNSRMUDAAE4VBMSRYYAX3UOWYU3BQUZ6OK65NOWM",
+                "GCKX6MJOS3SKHTMZ7LEYDKYVZYHDFZBGN2FXEN27H5DAMV2YHB3FYF6U",
             )))
-            .limit(200)
+            .limit(10)
+            .join_with_txns()
             .call()
             .unwrap();
 
-        assert_eq!(op_records._embedded.records.len(), 200);
+        assert_eq!(op_records._embedded.records.len(), 10);
     }
 }
